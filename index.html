@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="sr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ZippPay - Digital Wallet</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <style>
+        :root { --primary: #4361ee; --bg-light: #f4f7fe; --sidebar-w: 250px; }
+        body { background: var(--bg-light); font-family: 'Segoe UI', sans-serif; overflow-x: hidden; transition: 0.3s; }
+        
+        #sidebar { width: var(--sidebar-w); height: 100vh; position: fixed; background: white; border-right: 1px solid #e0e0e0; z-index: 1000; }
+        .nav-link { color: #6c757d; padding: 12px 20px; margin: 5px 15px; border-radius: 10px; cursor: pointer; }
+        .nav-link:hover, .nav-link.active { background: var(--primary); color: white !important; }
+        
+        .content { margin-left: var(--sidebar-w); padding: 30px; min-height: 100vh; }
+        .card { border: none; border-radius: 15px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); transition: 0.3s; }
+        .card:hover { transform: translateY(-3px); }
+        
+        .visa-card { background: linear-gradient(135deg, #1e1e1e, #434343); color: white; border-radius: 15px; padding: 25px; position: relative; min-height: 180px; }
+        .visa-card.blue { background: linear-gradient(135deg, #4361ee, #1e3a8a); }
+        
+        body.dark-mode { background: #121212; color: white; }
+        body.dark-mode #sidebar, body.dark-mode .card { background: #1e1e1e; border-color: #333; color: white; }
+        
+        .view { display: none; }
+        .view.active { display: block; }
+
+        @media (max-width: 768px) {
+            #sidebar { width: 70px; }
+            .sidebar-text { display: none; }
+            .content { margin-left: 70px; }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="sidebar" class="d-flex flex-column">
+        <div class="p-4 text-center"><h4 class="fw-bold text-primary sidebar-text">ZippPay</h4><i class="bi bi-lightning-fill d-md-none fs-3 text-primary"></i></div>
+        <div class="nav flex-column">
+            <div class="nav-link active" onclick="showView('dashboard')"><i class="bi bi-grid-fill me-2"></i> <span class="sidebar-text">Dashboard</span></div>
+            <div class="nav-link" onclick="showView('wallet')"><i class="bi bi-wallet2 me-2"></i> <span class="sidebar-text">Wallet</span></div>
+            <div class="nav-link" onclick="showView('transfer')"><i class="bi bi-arrow-left-right me-2"></i> <span class="sidebar-text">Transfer</span></div>
+            <div class="nav-link" onclick="showView('activity')"><i class="bi bi-clock-history me-2"></i> <span class="sidebar-text">Activity</span></div>
+        </div>
+        <div class="mt-auto p-3">
+            <button class="btn btn-sm btn-outline-secondary w-100" onclick="toggleDark()">
+                <i class="bi bi-moon-stars"></i> <span class="sidebar-text">Dark Mode</span>
+            </button>
+        </div>
+    </div>
+
+    <div class="content">
+        <div class="d-flex justify-content-between align-items-center mb-5">
+            <h4 id="view-title" class="fw-bold">Dashboard</h4>
+            <div class="d-flex align-items-center gap-3">
+                <i class="bi bi-bell fs-5"></i>
+                <img src="https://i.pravatar.cc/40?img=5" class="rounded-circle border" alt="user">
+            </div>
+        </div>
+
+        <div id="dashboard" class="view active">
+            <div class="row g-4">
+                <div class="col-md-4">
+                    <div class="visa-card shadow">
+                        <div class="d-flex justify-content-between mb-4"><span>Total Balance</span><i class="bi bi-wifi fs-4"></i></div>
+                        <h2>24,500 RSD</h2>
+                        <p class="mt-4 mb-0 small opacity-75">**** **** **** 4290</p>
+                        <div class="d-flex justify-content-between"><span>Marko Majstorovic</span><strong>VISA</strong></div>
+                    </div>
+                </div>
+                <div class="col-md-8">
+                    <div class="card p-4 h-100">
+                        <h6 class="text-muted mb-3">Quick Actions</h6>
+                        <div class="d-flex gap-3 text-center">
+                            <div class="p-3 border rounded flex-fill shadow-sm" style="cursor:pointer" onclick="showView('transfer')"><i class="bi bi-send text-primary fs-3"></i><p class="m-0 small">Send</p></div>
+                            <div class="p-3 border rounded flex-fill shadow-sm" style="cursor:pointer"><i class="bi bi-qr-code text-success fs-3"></i><p class="m-0 small">Scan</p></div>
+                            <div class="p-3 border rounded flex-fill shadow-sm" style="cursor:pointer"><i class="bi bi-plus-circle text-warning fs-3"></i><p class="m-0 small">Top Up</p></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card mt-4 p-4">
+                <h6>Recent Activity</h6>
+                <div class="d-flex justify-content-between align-items-center py-2 border-bottom">
+                    <div class="d-flex align-items-center"><i class="bi bi-cart bg-light p-2 rounded-circle me-3"></i><div><p class="m-0 fw-bold">Ljilja</p><small class="text-muted">Today, 14:20</small></div></div>
+                    <span class="text-danger">-350 RSD</span>
+                </div>
+                <div class="d-flex justify-content-between align-items-center py-2">
+                    <div class="d-flex align-items-center"><i class="bi bi-arrow-down-left bg-light p-2 rounded-circle me-3"></i><div><p class="m-0 fw-bold">Poslovi po gradu</p><small class="text-muted">Yesterday</small></div></div>
+                    <span class="text-success">+3,200 RSD</span>
+                </div>
+            </div>
+        </div>
+
+        <div id="wallet" class="view">
+            <div class="row g-4">
+                <div class="col-md-4"><div class="visa-card blue"><h6>Personal Card</h6><h4>12,400 RSD</h4><p class="mt-4">**** 1122</p></div></div>
+                <div class="col-md-4"><div class="visa-card bg-secondary"><h6>Savings</h6><h4>80,100 RSD</h4><p class="mt-4">**** 9988</p></div></div>
+                <div class="col-md-4 border-dashed border rounded d-flex align-items-center justify-content-center" style="min-height: 180px; border: 2px dashed #ccc">
+                    <button class="btn btn-outline-primary">+ Add New Card</button>
+                </div>
+            </div>
+        </div>
+
+        <div id="transfer" class="view">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="card p-4">
+                        <form onsubmit="event.preventDefault(); alert('Transfer Sent!')">
+                            <label class="form-label">Recipient Account</label>
+                            <input type="text" class="form-control mb-3" placeholder="Enter IBAN or Email">
+                            <label class="form-label">Amount (RSD)</label>
+                            <input type="number" class="form-control mb-4" placeholder="0.00">
+                            <button class="btn btn-primary w-100 py-2">Send Money</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="activity" class="view">
+            <div class="card p-4 shadow-sm">
+                <div class="d-flex justify-content-between mb-3">
+                    <input type="text" class="form-control w-25" placeholder="Search...">
+                    <button class="btn btn-sm btn-light border">Download CSV</button>
+                </div>
+                <table class="table align-middle">
+                    <thead class="table-light"><tr><th>Date</th><th>Receiver</th><th>Status</th><th>Amount</th></tr></thead>
+                    <tbody>
+                        <tr><td>Mar 20, 2026</td><td>Ljila</td><td><span class="badge bg-success">Completed</span></td><td class="text-danger">-350 RSD</td></tr>
+                        <tr><td>Mar 18, 2026</td><td>Kod Zokija</td><td><span class="badge bg-success">Completed</span></td><td class="text-danger">-500 RSD</td></tr>
+                        <tr><td>Mar 15, 2026</td><td>Pekara Kokanovic</td><td><span class="badge bg-success">Completed</span></td><td class="text-danger">-500 RSD</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        function showView(viewId) {
+            document.getElementById('view-title').innerText = viewId.charAt(0).toUpperCase() + viewId.slice(1);
+            
+            document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+            document.getElementById(viewId).classList.add('active');
+            
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.classList.remove('active');
+                if(link.innerText.toLowerCase().includes(viewId)) link.classList.add('active');
+            });
+        }
+
+        function toggleDark() {
+            document.body.classList.toggle('dark-mode');
+        }
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
